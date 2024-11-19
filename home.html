@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="./node_modules/axios/dist/axios.min.js"></script>
+
+    <style>
+        body{
+            background-color: #f0ecff;
+        }
+        .card{
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!--ADD POST BUTTON-->
+    <button id="addPost" style="position: fixed; width: 100px; height: 100px; z-index: 999999999;  bottom: 13%; right: 6%;" class="rounded-circle bg-primary  " data-bs-target="#addBtn_modal" data-bs-toggle="modal"><span style="color: white; font-size: 50px;">+</span></button>
+    <!--====ADD POST BUTTON====-->
+
+    <!--MODALS -->
+    <!--LOGIN MODAL -->
+    <div class="modal fade" id="login_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">LOGIN</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="mb-3">
+                  <label for="recipient-name" class="col-form-label">USER NAME</label>
+                  <input type="text" class="form-control" id="recipient-name" value="santa">
+                </div>
+                <div class="mb-3">
+                  <label  class="col-form-label" for="recipient-password">PASSWORD</label>
+                  <input type="password" class="form-control" id="recipient-password" value="000111">
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CLOSE</button>
+              <button type="button" class="btn btn-primary"  onclick="btnLogin()">LOGIN</button>
+            </div>
+          </div>
+        </div>
+    </div>
+    <!--//LOGIN MODAL //-->
+    <!--REGISTER MODAL-->
+    <div class="modal fade" id="register_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">REGISTER A NEW USER</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="mb-3">
+                  <label for="register-recipient-name" class="col-form-label">USER NAME</label>
+                  <input type="text" class="form-control" id="register-recipient-name" >
+                </div>
+                <div class="mb-3">
+                    <label for="register-recipient-n" class="col-form-label">NAME</label>
+                    <input type="text" class="form-control" id="register-recipient-n" >
+                  </div>
+                <div class="mb-3">
+                  <label  class="col-form-label" for="register-recipient-password">PASSWORD</label>
+                  <input type="password" class="form-control" id="register-recipient-password">
+                </div>
+                <div class="mb-3">
+                  <label for="recipient-image-for-reg" class="col-form-label">IMAGE</label>
+                  <input type="file" class="form-control" id="recipient-image-for-reg">
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CLOSE</button>
+              <button type="button" class="btn btn-primary"  onclick="registerBtn()">REGISTER</button>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <!--//REGISTER MODAL //-->
+    <!--ADD POSTS MODAL-->
+    <div class="modal fade" id="addBtn_modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">CREATE A NEW POST</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div class="mb-3">
+                  <label for="recipient-title" class="col-form-label">TITLE</label>
+                  <input type="text" class="form-control" id="recipient-title">
+                </div>
+                <div class="mb-3">
+                  <label for="recipient-des">DESCRIPTION</label><br>
+                  <textarea id="recipient-des" name="comments" rows="3" cols="60" style="resize: none;">
+                  </textarea><br>
+                </div>
+                <div class="mb-3">
+                  <label for="recipient-image" class="col-form-label">IMAGE</label>
+                  <input type="file" class="form-control" id="recipient-image">
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">CLOSE</button>
+              <button type="button" class="btn btn-primary"  onclick="addNewPost()">CREATE</button>
+            </div>
+          </div>
+        </div>
+    </div>
+    <!--=====/// ADD POSTS MODAL////=====-->
+    <!--=====/////MODAL/////======-->
+
+
+    <div class="container pt-2">
+        <div class="d-flex justify-content-center">
+            <div class="col-9">
+                <nav class="navbar navbar-expand-lg bg-body-tertiary rounded shadow ">
+                    <div class="container-fluid">
+                      <a class="navbar-brand" href="#">AURA</a>
+                      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                      </button>
+                      <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav">
+                          <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" href="#">Profile</a>
+                          </li>
+                        </ul>
+                        <!--NON LOGGED IN  -->
+                        <div id="div-log" class="d-flex w-100 justify-content-end" >
+                            <button id="log-btn" type="button" class="btn btn-outline-success mx-2 " data-bs-toggle="modal" data-bs-target="#login_modal">LOGIN</button>
+                            <button id="reg-btn" type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#register_modal">REGISTER</button>
+                        </div>
+                        <!--//NON LOGGED IN  //-->
+                        <!--FOR LOGGED IN  -->
+
+                        <div id="div-logout" class="d-flex w-100 justify-content-end">
+                            <img src="./1.png" alt="" id="user-UI-img" style="width: 40px; height: 40px; " class="rounded-circle">
+                            <b id="user-UI-name" style="font-size: 22px; margin-left: 4px; margin-right: 4px;">@santa</b>
+                            <!-- <span id="user-UI-name" style="font-size: 22px; margin-left: 4px; margin-right: 4px;"></span> -->
+                            <button id="logout-btn" type="button" class="btn btn-outline-danger" onclick="logOut()">LOG OUT</button>
+
+                        </div>
+                        <!--//FOR LOGGED IN  //-->
+
+
+                      </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+    
+    <!-- MAIN CONTENT -->
+    <div class="container" style="height: 1000px;">
+        <!-- posts -->
+        <div class="d-flex justify-content-center mt-4">
+            <div class="col-9">
+                <div id="posts">
+                    <!-- post -->
+        
+                    <!-- <div class="card shadow">
+                        <div class="card-header">
+                          <img src="./1.png" alt="" style="width: 40px; height: 40px; " class="rounded-circle">
+                          <span><b>SANTA</b></span>
+                        </div>
+                        <div class="card-body">
+                            <img src="./2.png" alt="" style="width: 800px; height: 400px; margin-left: 60px;">
+                            <h6 style="color: gray; margin-left: 70px; font-size: 20px;" class="mt-2">2 min ago</h6>
+                            <h5 style="margin-left: 70px;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo, atque.</h5>
+                            <hr>
+                            <div style="margin-left: 70px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                    <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                                </svg>
+                                <span>
+                                    (3) Comments
+                                </span>
+                            </div>
+                        </div>
+                    </div> -->
+                    <!--// post// -->
+                                        <!-- post -->
+<!-- 
+                                        <div class="card shadow">
+                                            <div class="card-header">
+                                              <img src="./1.png" alt="" style="width: 40px; height: 40px; " class="rounded-circle">
+                                              <span><b>SANTA</b></span>
+                                            </div>
+                                            <div class="card-body">
+                                                <img src="./2.png" alt="" style="width: 800px; height: 400px; margin-left: 60px;">
+                                                <h6 style="color: gray; margin-left: 70px; font-size: 20px;" class="mt-2">2 min ago</h6>
+                                                <h5 style="margin-left: 70px;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo, atque.</h5>
+                                                <hr>
+                                                <div style="margin-left: 70px;">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                                                    </svg>
+                                                    <span>
+                                                        (3) Comments
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div> -->
+                                        <!--// post// -->
+                                                            <!-- post -->
+        
+                    <!-- <div class="card shadow">
+                        <div class="card-header">
+                          <img src="./1.png" alt="" style="width: 40px; height: 40px; " class="rounded-circle">
+                          <span><b>SANTA</b></span>
+                        </div>
+                        <div class="card-body">
+                            <img src="./2.png" alt="" style="width: 800px; height: 400px; margin-left: 60px;">
+                            <h6 style="color: gray; margin-left: 70px; font-size: 20px;" class="mt-2">2 min ago</h6>
+                            <h5 style="margin-left: 70px;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo, atque.</h5>
+                            <hr>
+                            <div style="margin-left: 70px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                    <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                                </svg>
+                                <span>
+                                    (3) Comments
+                                </span>
+                            </div>
+                        </div>
+                    </div> -->
+                    <!--// post// -->
+                                        <!-- post -->
+        
+                                        <!-- <div class="card shadow">
+                                            <div class="card-header">
+                                              <img src="./1.png" alt="" style="width: 40px; height: 40px; " class="rounded-circle">
+                                              <span><b>SANTA</b></span>
+                                            </div>
+                                            <div class="card-body">
+                                                <img src="./2.png" alt="" style="width: 800px; height: 400px; margin-left: 60px;">
+                                                <h6 style="color: gray; margin-left: 70px; font-size: 20px;" class="mt-2">2 min ago</h6>
+                                                <h5 style="margin-left: 70px;">Lorem ipsum dolor sit amet consectetur adipisicing elit. Explicabo, atque.</h5>
+                                                <hr>
+                                                <div style="margin-left: 70px;">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                                                    </svg>
+                                                    <span>
+                                                        (3) Comments
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div> -->
+                                        <!--// post// -->
+        
+                    </div>
+            </div>
+        </div>
+                 
+        
+        <!--// posts //-->
+    </div>
+    <!--// MAIN CONTENT //-->
+    <!--ALERTS -->
+    <div id="danger-alert" class="fade show"  style="position: fixed; z-index: 999999; width: 30%; bottom: 0; right: 0;"></div>
+    
+    <div id="success-alert" class="fade show"  style="position: fixed; z-index: 999999; width: 30%; bottom: 0; right: 0;"></div>
+    <!--//ALERTS //-->
+    
+
+</body>
+<script src="./mainlogic.js"></script>
+
+
+<script>
+
+    const baseUrl = "https://tarmeezacademy.com/api/v1"
+    let currentPage = 1
+    const maxPages = 8;
+    //======= Infinite Scrolling======//
+    window.addEventListener("scroll", function() {
+    const endOfPage = window.innerHeight + window.pageYOffset >= document.body.offsetHeight;
+    if (endOfPage && currentPage <= maxPages) {
+        allContent(currentPage);
+    }
+    });
+    //======= Infinite Scrolling======//
+    UISetUp()
+    allContent()
+    function allContent(page = 1){
+      axios.get(`https://tarmeezacademy.com/api/v1/posts?limit=3&page=${page}`)
+    .then((response) => {
+        console.log(response)
+        const posts = response.data.data
+        //document.getElementById("posts").innerHTML = ""
+        for(post of posts){
+            const author = post.author
+                    let content = `
+                    <div class="card shadow">
+                        <div class="card-header">
+                            <img src="${author.profile_image}" alt="" style="width: 40px; height: 40px;" class="rounded-circle border border-3">
+                            <span><b>${author.username}</b></span>
+                            </div>
+                            <div class="card-body" onclick="postClicked(${post.id})" style="cursor: pointer">
+                                <img style="width: 800px; height: 300px;" src="${post.image}" alt="">
+                                <h6 style="color: gray;" class="mt-1">${post.created_at}</h6>
+                                <h5>${post.title}</h5>
+                                <p>${post.body}</p>
+                                <hr>
+                                    
+                            <div >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
+                                   <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001m-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708z"/>
+                                </svg>
+                                <span>(${post.comments_count}) Comments
+                                    <span>
+                                        <button class="btn btn-sm rounded-5" style="background-color: grey; color: white;">Policy</button>
+
+                                        </span>
+                                </span>
+                            </div>
+        
+                        </div>
+                    </div>
+            `
+             document.getElementById("posts").innerHTML += content
+        }      
+    })
+    currentPage++
+    if (currentPage > maxPages) {
+                window.removeEventListener("scroll", arguments.callee);
+            }
+    }
+
+    // function btnLogin(){
+    //     const password = document.getElementById("recipient-password").value
+    //     const username = document.getElementById("recipient-name").value
+    //     const params = {
+    //     "username" : username,
+    //     "password" : password
+    //     }
+    //     axios.post("https://tarmeezacademy.com/api/v1/login",params)
+    //     .then((response) => {
+    //         localStorage.setItem("token", response.data.token )
+    //         localStorage.setItem("user",JSON.stringify(response.data.user.username))
+    //         const modal = document.getElementById("login_modal")
+    //         const modalInstance = bootstrap.Modal.getOrCreateInstance(modal);
+            
+    //         modalInstance.hide()
+    //         showAllAlerts("Login successfully completed","success")
+    //         UISetUp()
+    //     }).catch((error) => {
+    //         const message = error.response.data.message
+    //         //console.log(error.response.data.message)
+    //         showAllAlerts(message,"danger")
+    //     })
+
+        
+    // }
+    function addNewPost(){
+
+        const title = document.getElementById("recipient-title").value
+        const image = document.getElementById("recipient-image").files[0]
+
+        const body = document.getElementById("recipient-des").value
+        const token = localStorage.getItem("token")
+        const headers = {
+          "authorization" : `Bearer ${token}`
+        }
+        const formData = new FormData()
+        formData.append("title",title)
+        formData.append('image',image)
+        formData.append('body',body)
+
+
+        // const params = {
+        //  "image" : image, 
+        // "title" : title,
+        // "body" : body
+        // }
+        axios.post("https://tarmeezacademy.com/api/v1/posts",formData, {
+          headers : headers
+        })
+        .then((response) => {
+          console.log(response) 
+          const modal = document.getElementById("addBtn_modal")
+          const modalInstance = bootstrap.Modal.getOrCreateInstance(modal);
+            
+          modalInstance.hide()
+          showAllAlerts("Add post successfully","success")
+          allContent()
+          
+        }).catch((error) => {
+            const message = error.response.data.message
+            //console.log(error.response.data.message)
+            showAllAlerts(message,"danger")
+        })      
+    }
+
+    
+//     btnLogin()
+function postClicked(postId){
+  location = `postDetials.html?postId=${postId}&body=${post.body}&image=${post.image}`
+}
+
+</script>
+</html> 
